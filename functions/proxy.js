@@ -7,7 +7,6 @@ export async function onRequest({ request }) {
     targetUrl = 'https://raw.githubusercontent.com/yd072/tv/refs/heads/main/itvlist.txt';
   } else if (url.pathname.startsWith('/iptvs')) {
     targetUrl = 'https://raw.githubusercontent.com/yd072/iptv-api/refs/heads/master/output/result.txt';
-
   } else {
     return new Response('Not Found', { status: 404 });
   }
@@ -22,11 +21,12 @@ export async function onRequest({ request }) {
       },
     });
 
-    // 检查目标站点的响应并返回
+    // 返回目标站点的响应
     return new Response(await response.text(), {
       status: response.status,
       headers: {
         'Content-Type': response.headers.get('Content-Type') || 'text/plain',
+        'Access-Control-Allow-Origin': '*', // 添加 CORS 支持
       },
     });
   } catch (error) {
