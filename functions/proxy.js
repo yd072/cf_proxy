@@ -11,22 +11,27 @@ export async function onRequest({ request }) {
   }
 
   try {
+    // 使用缓存避免频繁请求
     const cache = caches.default;
     const cacheKey = new Request(targetUrl, request);
-    let cachedResponse = await cache.match(cacheKey);
+    const cachedResponse = await cache.match(cacheKey);
 
     if (cachedResponse) {
-      console.log('Cache hit');
       return cachedResponse;
     }
 
-    console.log('Cache miss, fetching from origin');
+    // 发送请求到目标站点
     const response = await fetch(targetUrl, {
-      method: request.method,
+      method: 'GET',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0',
+        'Authorization': 'token YOUR_PERSONAL_ACCESS_TOKEN', // 替换为你的 GitHub Token
       },
     });
+
+    if (!response.ok) {
+      return new Response(`Error fetching target URL: ${response.statusText}`, { status: response.status });
+    }
 
     const finalResponse = new Response(await response.text(), {
       status: response.status,
@@ -36,9 +41,10 @@ export async function onRequest({ request }) {
       },
     });
 
+    // 将响应写入缓存
     await cache.put(cacheKey, finalResponse.clone());
     return finalResponse;
   } catch (error) {
-    return new Response(`Error fetching target URL: ${error.message}`, { status: 500 });
+    return new Response(`Error: ${error.message}`, { status: 500 });
   }
 }
