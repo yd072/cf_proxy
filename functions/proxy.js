@@ -4,7 +4,7 @@ export async function onRequest({ request }) {
   // 根据路径代理到不同的目标站点
   let targetUrl;
   if (url.pathname.startsWith('/proxy')) {
-    targetUrl = 'https://raw.githubusercontent.com/yd072/iptv-api/refs/heads/master/output/result.txt';
+    targetUrl = 'https://raw.githubusercontent.com/yd072/tv/refs/heads/main/itvlist.txt';
   } else if (url.pathname.startsWith('/iptvs')) {
     targetUrl = 'https://raw.githubusercontent.com/yd072/iptv-api/refs/heads/master/output/result.txt';
   
