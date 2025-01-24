@@ -1,7 +1,7 @@
 // functions/proxy.js
 export async function onRequest({ request }) {
   // 代理目标 URL（GitHub 上的 raw 文件链接）
-  const targetUrl = 'https://raw.githubusercontent.com/yd072/tv/refs/heads/main/itvlist.txt';
+  const targetUrl = 'https://raw.githubusercontent.com/yd072/iptv-api/refs/heads/master/output/result.txt';
 
   // 请求目标 URL
   const response = await fetch(targetUrl);
